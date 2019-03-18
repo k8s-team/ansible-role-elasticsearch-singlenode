@@ -1,0 +1,15 @@
+---
+# defaults file for elasticsearch
+
+destFolder: "{{ ansible_env.HOME }}/.k8s-team/elasticsearch-singlenode"
+state: present
+
+releaseName:  elasticsearch-singlenode-chart
+
+persistance:
+  enabled: false
+  claim: claim
+
+ingress:
+  enabled: false
+  host: example.com

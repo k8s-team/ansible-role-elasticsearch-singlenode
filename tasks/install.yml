@@ -1,0 +1,13 @@
+---
+
+- name: Register deployed count chart
+  shell: helm ls | grep {{ releaseName }} | wc -l
+  register: deployed
+
+- name: Create chart
+  shell: |
+    helm install \
+     --name {{ releaseName }} \
+     --set persistance.enabled={{ persistance.enabled }},persistance.volumeClaim={{ claim }},ingress.enabled={{ ingress.enabled }},ingress.host={{ ingress.host }} \
+     --wait {{ destFolder }}/chart
+  when: deployed.stdout == "0"
