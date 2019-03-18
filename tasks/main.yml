@@ -6,3 +6,6 @@
 
 - include_tasks: uninstall.yml
   when: state == 'absent'
+
+- include_tasks: upgrade.yml
+  when: state == 'upgrade'

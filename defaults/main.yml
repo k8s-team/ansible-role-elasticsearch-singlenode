@@ -8,7 +8,7 @@ releaseName:  elasticsearch-singlenode-chart
 
 persistance:
   enabled: false
-  claim: claim
+  volumeClaim: volumeClaim
 
 ingress:
   enabled: false

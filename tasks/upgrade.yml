@@ -1,0 +1,34 @@
+---
+
+- name: Clean {{ destFolder }}
+  file:
+    path: "{{ destFolder }}"
+    state: absent
+
+- name: Ensures {{ destFolder }} dir exists
+  file:
+    path: "{{ destFolder }}"
+    state: directory
+
+- name: Copy files
+  copy:
+    src: "{{ item }}"
+    remote_src: no
+    dest: "{{ destFolder }}"
+  loop:
+    - "chart"
+
+- name: Register deployed count chart
+  shell: helm ls | grep {{ releaseName }} | wc -l
+  register: deployed
+
+- name: Upgrade chart
+  shell: |
+    helm upgrade \
+     --set persistance.enabled={{ persistance.enabled }} \
+     --set persistance.volumeClaim={{ persistance.volumeClaim }} \
+     --set ingress.enabled={{ ingress.enabled }} \
+     --set ingress.host={{ ingress.host }} \
+     --force \
+     --wait {{ releaseName }} {{ destFolder }}/chart
+  when: deployed.stdout != "0"

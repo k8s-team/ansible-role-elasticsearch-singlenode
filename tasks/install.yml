@@ -1,5 +1,18 @@
 ---
 
+- name: Ensures {{ destFolder }} dir exists
+  file:
+    path: "{{ destFolder }}"
+    state: directory
+
+- name: Copy files
+  copy:
+    src: "{{ item }}"
+    remote_src: no
+    dest: "{{ destFolder }}"
+  loop:
+    - "chart"
+
 - name: Register deployed count chart
   shell: helm ls | grep {{ releaseName }} | wc -l
   register: deployed
@@ -8,6 +21,6 @@
   shell: |
     helm install \
      --name {{ releaseName }} \
-     --set persistance.enabled={{ persistance.enabled }},persistance.volumeClaim={{ claim }},ingress.enabled={{ ingress.enabled }},ingress.host={{ ingress.host }} \
+     --set persistance.enabled={{ persistance.enabled }},persistance.volumeClaim={{ persistance.volumeClaim }},ingress.enabled={{ ingress.enabled }},ingress.host={{ ingress.host }} \
      --wait {{ destFolder }}/chart
   when: deployed.stdout == "0"
