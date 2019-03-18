@@ -6,7 +6,7 @@ state: present
 
 releaseName:  elasticsearch-singlenode-chart
 
-persistance:
+persistence:
   enabled: false
   volumeClaim: volumeClaim
 
